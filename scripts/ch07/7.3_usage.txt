@@ -1,0 +1,11 @@
+#!/bin/bash
+Pgm=$(basename $0)
+if [ $# -ne 1 ]
+then
+  echo "Wrong number of parameters passed to script."
+  echo "Usage: $Pgm ORACLE_SID"
+  exit 1
+else
+  echo "$1 passed to the script"
+fi
+exit 0

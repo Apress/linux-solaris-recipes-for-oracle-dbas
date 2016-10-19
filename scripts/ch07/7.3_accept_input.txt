@@ -1,0 +1,12 @@
+#!/bin/bash
+keepGoing=n
+echo "Current value of ORACLE_SID: $ORACLE_SID"
+echo -n "Do you want to continue? y/n "
+read keepGoing
+if [ "$keepGoing" = "y" ]; then
+  echo "Continue to run script."
+else
+  echo "Exiting script"
+  exit 1
+fi
+exit 0

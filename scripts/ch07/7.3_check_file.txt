@@ -1,0 +1,8 @@
+#!/bin/bash
+checkFile=/home/trace/error.log
+if [ -e $checkFile ]; then
+  mail -s "error.log exists" dba@gmail.com <$checkFile
+else
+  echo "$checkFile does not exist"
+fi
+exit 0

@@ -1,0 +1,48 @@
+#!/bin/bash
+PRG=$(basename $0)
+#
+# Validate parameters
+USAGE="Usage: ${PRG} <database name> "
+if [ $# -ne 1 ]; then
+   echo "${USAGE}"
+   exit 1
+fi
+#
+# Set variables used in the script
+SID=${1}
+CONSTR=system/foo@${SID}
+MAILX='/bin/mailx'
+MAIL_LIST='dba@gmail.com'
+LOG_DIR=/home/oracle/scripts
+DAY=$(date +%F)
+LOG_FILE=${LOG_DIR}/${PRG}.${DAY}.$$.log
+LOC_SID=O1212
+BOX=$(uname -a | awk '{print$2}')
+#
+# Source oracle variables
+. /etc/oraset $LOC_SID
+#
+# Attempt to connect to database via SQL*Plus
+crit_var=$(sqlplus -s <<EOF
+$CONSTR
+SET HEAD OFF FEED OFF
+select 'success' from dual;
+EOF)
+#
+# Write output to log file
+echo ${crit_var} > $LOG_FILE
+#
+# Send status
+echo $crit_var | grep success 2>&1 >/dev/null
+if [[ $? -ne 0 ]]; then
+  $MAILX -s "Problem with ${SID} on ${BOX}" $MAIL_LIST <$LOG_FILE
+else
+  echo "Success: ${SID} on ${BOX}" | \
+  $MAILX -s "Success: ${SID} okay on ${BOX}" $MAIL_LIST
+fi
+#
+exit 0
+
+
+
+

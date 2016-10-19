@@ -1,0 +1,13 @@
+#------------------------------------------
+# cd to alert log directory
+function ad {
+  if [ $ORACLE_SID = "O1212" ]; then
+    cd  /u01/app/oracle/diag/rdbms/o1212/O1212/trace
+  elif [ $ORACLE_SID = "DWREP" ]; then
+    cd /orahome/app/oracle/diag/rdbms/dwrep/DWREP/trace
+  fi
+  pwd
+} # ad
+#------------------------------------------
+
+

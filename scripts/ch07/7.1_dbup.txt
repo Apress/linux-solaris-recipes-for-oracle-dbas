@@ -1,0 +1,7 @@
+#!/bin/bash
+# Check if database is up.
+ORACLE_SID=O1212
+ORACLE_HOME=/orahome/app/oracle/product/12.1.0.2/db_1
+PATH=$ORACLE_HOME/bin:$PATH
+echo "select 'DB up' from dual;" | sqlplus -s system/foo
+exit 0

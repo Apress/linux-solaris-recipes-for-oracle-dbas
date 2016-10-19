@@ -1,0 +1,11 @@
+#!/bin/bash
+# Check for background process.
+ORACLE_SID=O1212
+critProc=ora_smon
+ps -ef | grep -v 'grep' | grep ${critProc}_$ORACLE_SID
+if [ $? -eq 0 ]; then
+  echo "SMON $ORACLE_SID is available."
+else
+  echo "SMON $ORACLE_SID issue." | mailx -s "issue with SMON $ORACLE_SID" dba@gmail.com 
+fi	
+exit 0

@@ -1,0 +1,5 @@
+# User specific environment and startup programs
+export ORACLE_SID=O1212
+export ORACLE_HOME=/u01/app/oracle/product/12.1.0.2/db_1
+export PATH=$PATH:$ORACLE_HOME/bin
+PS1='[\h:\u:${ORACLE_SID}]$ '

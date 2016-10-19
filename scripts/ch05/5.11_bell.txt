@@ -1,0 +1,5 @@
+spool out
+select chr(7) || 'ring the bell' from dual;
+exit;
+
+

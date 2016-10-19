@@ -1,0 +1,10 @@
+#!/bin/bash
+ORACLE_SID=TRG
+ORACLE_HOME=/orahome/app/oracle/product/12.1.0.2/db_1
+PATH=$PATH:$ORACLE_HOME/bin
+#
+rman target / <<EOF
+backup database;
+EOF
+exit 0
+

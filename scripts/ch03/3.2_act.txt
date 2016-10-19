@@ -1,0 +1,35 @@
+ACCEPT active DEFAULT 'y' PROMPT 'Active only processes y/n? [y is default]: '
+SET LINES 200 PAGES 0 HEAD OFF LONG 100000
+COL dummy_value NOPRINT
+--
+SELECT 'dummy_value' dummy_value,
+  'USERNAME    : ' || s.username     || CHR(10) ||
+  'SCHEMA      : ' || s.schemaname   || CHR(10) ||
+  'OSUSER      : ' || s.osuser       || CHR(10) ||
+  'MODULE      : ' || s.program      || CHR(10) ||
+  'ACTION      : ' || s.schemaname   || CHR(10) ||
+  'CLIENT INFO : ' || s.osuser       || CHR(10) ||
+  'PROGRAM     : ' || s.program      || CHR(10) ||
+  'SPID        : ' || p.spid         || CHR(10) ||
+  'SID         : ' || s.sid          || CHR(10) ||
+  'SERIAL#     : ' || s.serial#      || CHR(10) ||
+  'KILL STRING : ' || '''' || s.sid || ',' || s.serial# || ''''  || CHR(10) ||
+  'MACHINE     : ' || s.machine      || CHR(10) ||
+  'TYPE        : ' || s.type         || CHR(10) ||
+  'TERMINAL    : ' || s.terminal     || CHR(10) ||
+  'CPU         : ' || q.cpu_time/1000000     || CHR(10) ||
+  'ELAPSED_TIME: ' || q.elapsed_time/1000000 || CHR(10) ||
+  'BUFFER_GETS : ' || q.buffer_gets  || CHR(10) ||
+  'SQL_ID      : ' || q.sql_id       || CHR(10) ||
+  'CHILD_NUM   : ' || q.child_number || CHR(10) ||
+  'START_TIME  : ' || TO_CHAR(s.sql_exec_start,'dd-mon-yy hh24:mi') || CHR(10) || 
+  'STATUS      : ' || s.status       || CHR(10) ||
+  'SQL_TEXT    : ' || q.sql_fulltext
+FROM            v$session s
+JOIN            v$process p ON (s.paddr  = p.addr)
+LEFT OUTER JOIN v$sql     q ON (s.sql_id = q.sql_id)
+WHERE s.username IS NOT NULL -- eliminates background procs
+AND NVL(q.sql_text,'x') NOT LIKE '%dummy_value%' -- eliminates this query from output
+AND s.status != DECODE('&&active','n','xyz','N','xyz','INACTIVE')
+ORDER BY q.cpu_time;
+
